@@ -1,11 +1,14 @@
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
+
 import { defineConfig } from "vite";
+import { sveltekit } from '@sveltejs/kit/vite';
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import sveltePreprocess from "svelte-preprocess";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [svelte()],
-
+  plugins: [sveltekit()],
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   // prevent vite from obscuring rust errors
   clearScreen: false,
@@ -24,5 +27,5 @@ export default defineConfig(async () => ({
     minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
-  },
+  }
 }));

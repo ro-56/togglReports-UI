@@ -5,11 +5,13 @@
     import { beforeUpdate } from 'svelte';
     
     
-    export let date;
-    export let label;
+    export let date: string = "";
+    export let initial_date: string = undefined;
+    export let label: string = undefined;
 
     beforeUpdate(() => {
         label = label || undefined;
+        date = date || initial_date || "";
     });
 
     function clicked(e) {
@@ -22,18 +24,21 @@
 
 
 <div class="content">
-  <Textfield variant="outlined" 
-            type="date"
-            label={label}
-            on:click={clicked}
-            bind:value={date}>
+  <Textfield 
+    variant="outlined" 
+    type="date"
+    label={label}
+    required
+    on:click={clicked}
+    bind:value={date}
+  >
     <Icon class="material-icons" slot="trailingIcon">today</Icon>
   </Textfield>
 </div>
 
 <style>
   .content {
-    margin: 10px 10px 14px;
+    padding: 5px 5px 10px;
     width: auto;
   }
 </style>

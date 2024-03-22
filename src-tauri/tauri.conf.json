@@ -3,16 +3,22 @@
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
     "devPath": "http://localhost:1420",
-    "distDir": "../dist",
+    "distDir": "../build",
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "testing",
-    "version": "0.0.0"
+    "version": "../package.json"
   },
   "tauri": {
     "allowlist": {
       "all": false,
+      "fs": {
+        "writeFile": true,
+        "exists": true
+      },
+      "http": {
+        "all": true
+      },
       "shell": {
         "all": false,
         "open": true
@@ -21,7 +27,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "asdasdasdasd",
+      "identifier": "rrm-togglreports",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -36,11 +42,22 @@
     "windows": [
       {
         "fullscreen": false,
-        "resizable": true,
-        "title": "testing",
-        "width": 800,
+        "resizable": false,
+        "title": "Toggl Reports",
+        "width": 500,
         "height": 600
       }
-    ]
+    ],
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://gist.githubusercontent.com/ro-56/ee1674b9939e79a4860ad16372089124/raw/togglReports-latest.json"
+      ],
+      "dialog": true,
+      "windows": {
+        "installMode": "passive"
+      },
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU0OUQxRjAwMDhFMjU0QTkKUldTcFZPSUlBQitkVkg0aDViRG1qRnMxNzlZNWN4WGFwRjBuR0V0L3FYY1pQZEZ3aXZ3ek5lTmQK"
+    }
   }
 }

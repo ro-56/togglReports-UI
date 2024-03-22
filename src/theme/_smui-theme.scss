@@ -1,0 +1,49 @@
+@use 'sass:color';
+
+@use '@material/theme/color-palette';
+
+// Svelte Colors! (Dark Theme)
+@use '@material/theme/index' as theme with (
+  $primary: #ff3e00,
+  $secondary: color.scale(#676778, $whiteness: -10%),
+  $surface: color.adjust(color-palette.$grey-900, $blue: +4),
+  $background: #000,
+  $error: color-palette.$red-700
+);
+@use '@smui/snackbar/style' as smui-snackabar;
+@use '@material/snackbar/mixins' as snackbar;
+
+html,
+body {
+  background-color: #000;
+  color: theme.$on-surface;
+}
+
+a {
+  color: #40b3ff;
+}
+a:visited {
+  color: color.scale(#40b3ff, $lightness: -35%);
+}
+
+
+.mdc-snackbar.action-success {
+  @include snackbar.fill-color(color-palette.$green-500);
+  @include snackbar.label-ink-color(
+    theme.accessible-ink-color(color-palette.$green-500)
+  );
+}
+ 
+.mdc-snackbar.action-warning {
+  @include snackbar.fill-color(color-palette.$orange-500);
+  @include snackbar.label-ink-color(
+    theme.accessible-ink-color(color-palette.$orange-500)
+  );
+}
+ 
+.mdc-snackbar.action-error {
+  @include snackbar.fill-color(color-palette.$red-500);
+  @include snackbar.label-ink-color(
+    theme.accessible-ink-color(color-palette.$red-500)
+  );
+}
