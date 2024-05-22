@@ -170,7 +170,7 @@ pub async fn get_workspaces(token: Option<String>) -> Result<Vec<Workspace>, Err
 pub struct Project {
     pub id: u32,
     pub workspace_id: u32,
-    client_id: u32,
+    client_id: Option<u32>,
     pub name: String,
     is_private: bool,
     active: bool,
@@ -190,8 +190,8 @@ pub struct Project {
     current_period: Option<String>,
     fixed_fee: Option<f32>,
     actual_hours: Option<u32>,
-    wid: u32,
-    cid: u32,
+    wid: Option<u32>,
+    cid: Option<u32>,
 }
 
 async fn get_projects() -> Result<Vec<Project>, Error> {
@@ -218,7 +218,7 @@ async fn get_projects() -> Result<Vec<Project>, Error> {
                     Ok(projects)
                 }
                 Err(e) => {
-                    println!("Error: {:?}", e);
+                    println!("Error while casting to <Project>: {:?}", e);
                     Err(e)
                 }
             }
@@ -294,7 +294,7 @@ async fn get_time_entries(
     }
 }
 
-pub async fn get_time_entries_with_command(command: &Command<'_>) -> Vec<TimeEntry> {
+pub async fn get_time_entries_with_command(command: &Command<'_>) -> Result<Vec<TimeEntry>, Error> {
     let start_date: String;
     let end_date: String;
 
@@ -366,7 +366,8 @@ pub async fn get_time_entries_with_command(command: &Command<'_>) -> Vec<TimeEnt
     println!("Start Date: {:?}", start_date);
     println!("End Date: {:?}", end_date);
     let mut time_entries = get_time_entries((start_date, end_date)).await.unwrap();
-    let projects = get_projects().await.unwrap();
+    
+    let projects = get_projects().await?;
 
     for time_entry in &mut time_entries {
         // println!("Time Entry: {:?}", time_entry);
@@ -389,5 +390,5 @@ pub async fn get_time_entries_with_command(command: &Command<'_>) -> Vec<TimeEnt
         time_entry.project_name = project_name;
     }
 
-    time_entries
+    Ok(time_entries)
 }
