@@ -65,7 +65,7 @@ pub fn get_last_used_options() -> Result<LastUsedOptions, confy::ConfyError> {
     Ok(cfg)
 }
 
-pub fn set_last_used_options(cfg: LastUsedOptions) -> Result<(), confy::ConfyError> {
-    let _ = confy::store(APP_NAME, LAST_USED_OPTIONS_CONFIG_NAME, cfg);
-    Ok(())
-}
+// pub fn set_last_used_options(cfg: LastUsedOptions) -> Result<(), confy::ConfyError> {
+//     let _ = confy::store(APP_NAME, LAST_USED_OPTIONS_CONFIG_NAME, cfg);
+//     Ok(())
+// }

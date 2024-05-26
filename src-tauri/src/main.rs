@@ -25,7 +25,10 @@ fn run(command: Command) -> String {
     // Get time entries from Toggl API
     // Get from sync function to this sync function
     let rt = tokio::runtime::Runtime::new().unwrap();
-    let entries = rt.block_on(toggl_api::get_time_entries_with_command(&command));
+    let entries = match rt.block_on(toggl_api::get_time_entries_with_command(&command)) {
+        Ok(res) => res,
+        Err(e) => return format!("{}", e),
+    };
     let entries_number = entries.len();
 
     // Transform time entries to SGU format
