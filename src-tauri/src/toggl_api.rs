@@ -370,7 +370,6 @@ pub async fn get_time_entries_with_command(command: &Command<'_>) -> Result<Vec<
     let projects = get_projects().await?;
 
     for time_entry in &mut time_entries {
-        // println!("Time Entry: {:?}", time_entry);
         let project_id = time_entry.project_id;
         let workspace_id = time_entry.workspace_id;
         let project_name = {

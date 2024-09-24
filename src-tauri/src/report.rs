@@ -48,7 +48,7 @@ fn process_duration(duration: i64) -> String {
 fn process_name(name: &str) -> String {
     let mut name = name.to_string();
 
-    if name.len() > MAX_NAME_LENGTH {
+    if name.chars().count() > MAX_NAME_LENGTH {
         name.truncate(MAX_NAME_LENGTH);
     }
 
