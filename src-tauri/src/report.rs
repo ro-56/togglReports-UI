@@ -49,10 +49,20 @@ fn process_name(name: &str) -> String {
     let mut name = name.to_string();
 
     if name.chars().count() > MAX_NAME_LENGTH {
-        name.truncate(MAX_NAME_LENGTH);
+        // name.truncate(MAX_NAME_LENGTH);
+        name = truncate(&name, MAX_NAME_LENGTH).to_string();
+        // truncate_in_place(&mut name, MAX_NAME_LENGTH);
     }
 
     name
+}
+
+/// Truncate string to max_chars. Custom implementation to avoid panics with non-ASCII characters
+fn truncate(s: &str, max_chars: usize) -> &str {
+    match s.char_indices().nth(max_chars) {
+        None => s,
+        Some((idx, _)) => &s[..idx],
+    }
 }
 
 /// Transfort classes to SGU format
