@@ -84,6 +84,7 @@ pub fn get_available_commands() -> Vec<Command<'static>> {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Workspace {
+    // active_project_count
     admin: bool,
     api_token: String,
     at: String,
@@ -91,27 +92,36 @@ pub struct Workspace {
     // csv_upload: Option<CsvUpload>,  //DISABLED
     default_currency: String,
     default_hourly_rate: Option<f32>,
+    // disable_approvals
+    // disable_expenses
+    // disable_timesheet_view
+    // hide_start_end_times
     ical_enabled: bool,
     ical_url: String,
     pub id: u64,
+    // last_modified
+    // limit_public_project_data
     logo_url: String,
+    // max_data_retention_days
     pub name: String,
     only_admins_may_create_projects: bool,
     only_admins_may_create_tags: bool,
-    only_admins_see_billable_rates: bool,
     only_admins_see_team_dashboard: bool,
     organization_id: u32,
+    // permissions
     premium: bool,
-    profile: u32,
+    // profile: u32,
     projects_billable_by_default: bool,
+    // projects_enforce_billable
+    // projects_private_by_default
     rate_last_updated: Option<String>,
     reports_collapse: bool,
     role: Option<String>,
     rounding: u32,
     rounding_minutes: u32,
-    server_deleted_at: Option<String>,
-    // subscription: Option<String>,  //DISABLED
+    // subscription: Option<String>,  //deprecated
     suspended_at: Option<String>,
+    // te_constraints
     working_hours_in_minutes: Option<String>,
 }
 
@@ -132,7 +142,7 @@ pub async fn get_workspaces(token: Option<String>) -> Result<Vec<Workspace>, Err
     }
 
     let client = Client::new();
-    let url = "https://api.track.toggl.com/api/v9/workspaces";
+    let url = "https://api.track.toggl.com/api/v9/me/workspaces";
 
     let response = client
         .get(url)
