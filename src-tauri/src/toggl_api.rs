@@ -107,7 +107,7 @@ pub struct Workspace {
     only_admins_may_create_projects: bool,
     only_admins_may_create_tags: bool,
     only_admins_see_team_dashboard: bool,
-    organization_id: u32,
+    organization_id: u64,
     // permissions
     premium: bool,
     // profile: u32,
@@ -178,9 +178,9 @@ pub async fn get_workspaces(token: Option<String>) -> Result<Vec<Workspace>, Err
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Project {
-    pub id: u32,
-    pub workspace_id: u32,
-    client_id: Option<u32>,
+    pub id: u64,
+    pub workspace_id: u64,
+    client_id: Option<u64>,
     pub name: String,
     is_private: bool,
     active: bool,
@@ -200,8 +200,8 @@ pub struct Project {
     current_period: Option<String>,
     fixed_fee: Option<f32>,
     actual_hours: Option<u32>,
-    wid: Option<u32>,
-    cid: Option<u32>,
+    wid: Option<u64>,
+    cid: Option<u64>,
 }
 
 async fn get_projects() -> Result<Vec<Project>, Error> {
@@ -246,21 +246,21 @@ pub struct TimeEntry {
     pub description: Option<String>,
     pub duration: i64,
     duronly: bool,
-    id: u32,
-    pub project_id: Option<u32>,
+    id: u64,
+    pub project_id: Option<u64>,
     pub project_name: Option<String>,
     server_deleted_at: Option<String>,
     pub start: String,
     stop: Option<String>,
-    tag_ids: Vec<u32>,
+    tag_ids: Vec<u64>,
     pub tags: Vec<String>,
-    task_id: Option<u32>,
-    user_id: u32,
-    pub workspace_id: u32,
-    uid: Option<u32>, //Legacy
-    wid: Option<u32>, //Legacy
-    pid: Option<u32>, //Legacy
-    tid: Option<u32>, //Legacy
+    task_id: Option<u64>,
+    user_id: u64,
+    pub workspace_id: u64,
+    uid: Option<u64>, //Legacy
+    wid: Option<u64>, //Legacy
+    pid: Option<u64>, //Legacy
+    tid: Option<u64>, //Legacy
 }
 
 async fn get_time_entries(
@@ -273,6 +273,8 @@ async fn get_time_entries(
     start_date=start_date,
     end_date=end_date
   );
+    // println!("{}", api_token);
+    // println!("{}", url);
 
     let response = client
         .get(url)
@@ -287,7 +289,7 @@ async fn get_time_entries(
             match response.json::<Vec<TimeEntry>>().await {
                 Ok(time_entries) => {
                     println!("Got '{:?}' time Entries", time_entries.len());
-                    // for time_entry in time_entries {
+                    // for time_entry in &time_entries {
                     //   println!("Time Entry: {:?}", time_entry);
                     // }
                     Ok(time_entries)
