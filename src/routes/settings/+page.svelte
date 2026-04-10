@@ -1,8 +1,9 @@
 <script  lang="ts">
     import Textfield from "@smui/textfield";
     import Button from '@smui/button';
+    import Select, { Option } from '@smui/select';
     import { invoke } from "@tauri-apps/api/tauri"
-    import type { Config } from "$lib/types";
+    import type { Config, ReportVersion, EffortType } from "$lib/types";
     import Snackbar from "$lib/Snackbar.svelte";
     import Workspaces from "$lib/WorkspaceSelector.svelte";
     import { onMount } from "svelte";
@@ -14,6 +15,8 @@
     let sgu_name: string = "";
     let ignore_tag: string = "";
     let default_tag: string = "";
+    let report_version: ReportVersion = "v2";
+    let effort_type: EffortType = "HHMM";
 
     let workspace_selector: Workspaces;
 
@@ -48,7 +51,9 @@
                         "output_file_dir": output_file_dir,
                         "sgu_name": sgu_name,
                         "ignore_tag": ignore_tag,
-                        "default_tag": default_tag
+                        "default_tag": default_tag,
+                        "report_version": report_version,
+                        "effort_type": effort_type
                     }
                 });
 
@@ -107,8 +112,10 @@
         output_file_dir = curr_config.output_file_dir;
         workspace_id = curr_config.workspace_filter;
         sgu_name = curr_config.sgu_name;
-        ignore_tag = curr_config.ignore_tag;
-        default_tag = curr_config.default_tag;
+        ignore_tag = curr_config.ignore_tag ?? "";
+        default_tag = curr_config.default_tag ?? "";
+        report_version = curr_config.report_version;
+        effort_type = curr_config.effort_type;
 
     }
 
@@ -193,6 +200,21 @@
             bind:value={default_tag}
             style="min-width: 250px; width: 100%;"/>
     </div>
+    <div class="row">
+        <Select variant="outlined" label="Report Version" bind:value={report_version} style="min-width: 250px; width: 100%;">
+            <Option value="v1">Legacy format (v1)</Option>
+            <Option value="v2">New format (v2)</Option>
+        </Select>
+    </div>
+    {#if report_version === 'v2'}
+    <div class="row">
+        <Select variant="outlined" label="Effort Type (TIPO_ESFORCO)" bind:value={effort_type} style="min-width: 250px; width: 100%;">
+            <Option value="HHMM">HH:MM (1h30m = 01:30)</Option>
+            <Option value="MINUTOS">Minutos (1h30m = 90)</Option>
+            <Option value="HORAS">Horas (1h30m = 1,50)</Option>
+        </Select>
+    </div>
+    {/if}
     <div class="row">
         <Button 
             on:click={restore_defaults}

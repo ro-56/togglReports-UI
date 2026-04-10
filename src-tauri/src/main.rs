@@ -31,9 +31,8 @@ fn run(command: Command) -> String {
     };
     let entries_number = entries.len();
 
-    // Transform time entries to SGU format
-    let sgu_entries = report::transform_multiple_time_entries(entries);
-    let csv_file = report::export_as_csv(sgu_entries);
+    // Generate report using configured version and effort type
+    let csv_file = report::generate_report(entries);
 
     format!("Saved to {}. Found {} entries.", csv_file, entries_number)
 }
