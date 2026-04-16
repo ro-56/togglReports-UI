@@ -201,14 +201,14 @@
             style="min-width: 250px; width: 100%;"/>
     </div>
     <div class="row">
-        <Select variant="outlined" label="Report Version" bind:value={report_version} style="min-width: 250px; width: 100%;">
+        <Select variant="filled" label="Report Version" bind:value={report_version} style="min-width: 250px; width: 100%;">
             <Option value="v1">Legacy format (v1)</Option>
             <Option value="v2">New format (v2)</Option>
         </Select>
     </div>
     {#if report_version === 'v2'}
     <div class="row">
-        <Select variant="outlined" label="Effort Type (TIPO_ESFORCO)" bind:value={effort_type} style="min-width: 250px; width: 100%;">
+        <Select variant="filled" label="Effort Type (TIPO_ESFORCO)" bind:value={effort_type} style="min-width: 250px; width: 100%;">
             <Option value="HHMM">HH:MM (1h30m = 01:30)</Option>
             <Option value="MINUTOS">Minutos (1h30m = 90)</Option>
             <Option value="HORAS">Horas (1h30m = 1,50)</Option>
