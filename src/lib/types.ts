@@ -11,12 +11,18 @@ export type LastUsedOptions = {
   end_date?: string;
 }
 
+export type ReportVersion = 'v1' | 'v2';
+export type EffortType = 'HORAS' | 'MINUTOS' | 'HHMM';
+
 export type Config = {
   api_token: string;
+  workspace_filter?: number;
   output_file_dir: string;
   sgu_name: string;
-  ignore_tag: string;
-  default_tag: string;
+  ignore_tag?: string;
+  default_tag?: string;
+  report_version: ReportVersion;
+  effort_type: EffortType;
 }
 
 export type Workspace = {

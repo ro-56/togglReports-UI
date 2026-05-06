@@ -6,7 +6,7 @@
     import ModeSelector from '$lib/ModeSelector.svelte'
     import DateInput from '$lib/DateInput.svelte'
     import Snackbar from "$lib/Snackbar.svelte";
-    import type { OptionItem, LastUsedOptions } from '$lib/types';
+    import type { OptionItem, LastUsedOptions, ReportVersion } from '$lib/types';
     import { onMount } from 'svelte';
 
     let APP_VERSION: string;
@@ -22,6 +22,8 @@
     let snackbar_text: string = "";
 
     let options: OptionItem[] = [];
+    let report_version: ReportVersion = 'v2';
+    let show_v2_banner: boolean = true;
 
     async function run(){
         if (requires_dates && (!selected_start_date || !selected_end_date)) {
@@ -53,6 +55,8 @@
   
     async function init() {
         options = await invoke("get_available_commands", { })
+        const cfg = await invoke("get_config", { }) as { report_version: ReportVersion };
+        report_version = cfg.report_version;
         APP_VERSION = await getVersion();
     }
   
@@ -99,6 +103,22 @@
             Confirm
         </Button>
         </div>
+
+        {#if report_version === 'v2' && show_v2_banner}
+        <div class="warning-banner" role="status" aria-live="polite">
+            <div>
+                Output will be generated in SGU v2 format by default. You can switch to v1 format if needed from the settings. V1 format will be removed in a future release.
+            </div>
+            <button
+                class="warning-close"
+                on:click={() => (show_v2_banner = false)}
+                aria-label="Dismiss v2 mode warning"
+                type="button"
+            >
+                x
+            </button>
+        </div>
+        {/if}
     </div>
 
     <div class="version">
@@ -126,6 +146,37 @@
     .button-confirm {
       padding: 5px 5px 10px;
     }
+
+        .warning-banner {
+            margin: 8px auto 6px;
+            width: min(540px, 92%);
+            background: #fff8e1;
+            border: 1px solid #ffd54f;
+            border-left: 4px solid #f9a825;
+            border-radius: 6px;
+            color: #5d4037;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        .warning-close {
+            border: none;
+            background: transparent;
+            color: #5d4037;
+            font-size: 1rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        .warning-close:hover {
+            color: #3e2723;
+        }
   
     .version {
       font-size: 0.75rem;
