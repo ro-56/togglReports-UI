@@ -1,6 +1,6 @@
 use chrono::{Local, NaiveDate};
 use csv::WriterBuilder;
-use encoding_rs::WINDOWS_1252;
+use encoding_rs::{UTF_8, WINDOWS_1252};
 use serde::Serialize;
 use std::io::Write;
 use std::path::Path;
@@ -198,7 +198,9 @@ fn export_as_csv_legacy(entries: Vec<SGUTimeEntryLegacy>, cfg: &MainConfig) -> S
     // Change encoding to ANSI
     let mut file = std::fs::File::create(&output_file).unwrap();
     let source = String::from_utf8(contents).unwrap();
-    let (encoded_contents, _, _) = WINDOWS_1252.encode(&source);
+    // let (encoded_contents, _, _) = WINDOWS_1252.encode(&source); # Portal was using this encoding. Seems to have migrated to UTF-8, but leaving this here just in case we need to revert.
+    let (encoded_contents, _, _) = UTF_8.encode(&source);
+
 
     file.write_all(&encoded_contents).unwrap();
 
@@ -274,7 +276,8 @@ fn export_as_csv_v2(entries: Vec<SGUTimeEntry>, cfg: &MainConfig) -> String {
     // Change encoding to ANSI
     let mut file = std::fs::File::create(&output_file).unwrap();
     let source = String::from_utf8(contents).unwrap();
-    let (encoded_contents, _, _) = WINDOWS_1252.encode(&source);
+    // let (encoded_contents, _, _) = WINDOWS_1252.encode(&source); # Portal was using this encoding. Seems to have migrated to UTF-8, but leaving this here just in case we need to revert.
+    let (encoded_contents, _, _) = UTF_8.encode(&source);
 
     file.write_all(&encoded_contents).unwrap();
 
