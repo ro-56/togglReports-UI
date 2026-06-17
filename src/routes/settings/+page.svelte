@@ -3,7 +3,7 @@
     import Button from '@smui/button';
     import Select, { Option } from '@smui/select';
     import { invoke } from "@tauri-apps/api/tauri"
-    import type { Config, ReportVersion, EffortType } from "$lib/types";
+    import type { Config, ReportVersion, EffortType, ReportEncoding } from "$lib/types";
     import Snackbar from "$lib/Snackbar.svelte";
     import Workspaces from "$lib/WorkspaceSelector.svelte";
     import { onMount } from "svelte";
@@ -17,6 +17,7 @@
     let default_tag: string = "";
     let report_version: ReportVersion = "v2";
     let effort_type: EffortType = "HHMM";
+    let report_encoding: ReportEncoding = "WINDOWS1252";
 
     let workspace_selector: Workspaces;
 
@@ -53,7 +54,8 @@
                         "ignore_tag": ignore_tag,
                         "default_tag": default_tag,
                         "report_version": report_version,
-                        "effort_type": effort_type
+                        "effort_type": effort_type,
+                        "report_encoding": report_encoding
                     }
                 });
 
@@ -63,6 +65,7 @@
                     snackbar.open();
                     return;
                 }
+                console.log(res);
             } catch (error) {
                 console.log(error);
             }
@@ -116,6 +119,7 @@
         default_tag = curr_config.default_tag ?? "";
         report_version = curr_config.report_version;
         effort_type = curr_config.effort_type;
+        report_encoding = curr_config.report_encoding;
 
     }
 
@@ -215,6 +219,12 @@
         </Select>
     </div>
     {/if}
+    <div class="row">
+        <Select variant="filled" label="Report Encoding" bind:value={report_encoding} style="min-width: 250px; width: 100%;">
+            <Option value="WINDOWS1252">WINDOWS-1252</Option>
+            <Option value="UTF8">UTF-8</Option>
+        </Select>
+    </div>
     <div class="row">
         <Button 
             on:click={restore_defaults}

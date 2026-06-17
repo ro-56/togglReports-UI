@@ -24,6 +24,15 @@ pub enum EffortType {
     Hhmm,
 }
 
+/// Report encoding enum - determines the character encoding for the CSV output
+#[derive(Serialize, Deserialize, Default, Clone, Copy, PartialEq, Debug)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum ReportEncoding {
+    #[default]
+    Windows1252,
+    Utf8,
+}
+
 /// Helper function for serde default
 fn default_report_version() -> ReportVersion {
     ReportVersion::default()
@@ -32,6 +41,11 @@ fn default_report_version() -> ReportVersion {
 /// Helper function for serde default
 fn default_effort_type() -> EffortType {
     EffortType::default()
+}
+
+/// Helper function for serde default
+fn default_report_encoding() -> ReportEncoding {
+    ReportEncoding::default()
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -46,6 +60,8 @@ pub struct MainConfig {
     pub report_version: ReportVersion,
     #[serde(default = "default_effort_type")]
     pub effort_type: EffortType,
+    #[serde(default = "default_report_encoding")]
+    pub report_encoding: ReportEncoding,
 }
 impl Default for MainConfig {
     fn default() -> Self {
@@ -64,6 +80,7 @@ impl Default for MainConfig {
             ignore_tag: Some("<IGNORE>".to_string()),
             report_version: ReportVersion::default(),
             effort_type: EffortType::default(),
+            report_encoding: ReportEncoding::default(),
         }
     }
 }
