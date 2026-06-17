@@ -13,6 +13,7 @@ export type LastUsedOptions = {
 
 export type ReportVersion = 'v1' | 'v2';
 export type EffortType = 'HORAS' | 'MINUTOS' | 'HHMM';
+export type ReportEncoding = 'UTF8' | 'WINDOWS1252';
 
 export type Config = {
   api_token: string;
@@ -23,6 +24,7 @@ export type Config = {
   default_tag?: string;
   report_version: ReportVersion;
   effort_type: EffortType;
+  report_encoding: ReportEncoding;
 }
 
 export type Workspace = {

@@ -5,7 +5,7 @@ use serde::Serialize;
 use std::io::Write;
 use std::path::Path;
 
-use crate::config::{get_config, EffortType, MainConfig, ReportVersion};
+use crate::config::{get_config, EffortType, MainConfig, ReportVersion, ReportEncoding};
 use crate::toggl_api::TimeEntry;
 
 const DATE_FORMAT: &str = "%d/%m/%Y";
@@ -195,12 +195,20 @@ fn export_as_csv_legacy(entries: Vec<SGUTimeEntryLegacy>, cfg: &MainConfig) -> S
 
     let contents = csv_writer.into_inner().unwrap();
 
-    // Change encoding to ANSI
+    // Change encoding based on user selection
     let mut file = std::fs::File::create(&output_file).unwrap();
     let source = String::from_utf8(contents).unwrap();
-    // let (encoded_contents, _, _) = WINDOWS_1252.encode(&source); # Portal was using this encoding. Seems to have migrated to UTF-8, but leaving this here just in case we need to revert.
-    let (encoded_contents, _, _) = UTF_8.encode(&source);
-
+    
+    let encoded_contents = match cfg.report_encoding {
+        ReportEncoding::Utf8 => {
+            let (encoded, _, _) = UTF_8.encode(&source);
+            encoded
+        }
+        ReportEncoding::Windows1252 => {
+            let (encoded, _, _) = WINDOWS_1252.encode(&source);
+            encoded
+        }
+    };
 
     file.write_all(&encoded_contents).unwrap();
 
@@ -273,11 +281,20 @@ fn export_as_csv_v2(entries: Vec<SGUTimeEntry>, cfg: &MainConfig) -> String {
 
     let contents = csv_writer.into_inner().unwrap();
 
-    // Change encoding to ANSI
+    // Change encoding based on user selection
     let mut file = std::fs::File::create(&output_file).unwrap();
     let source = String::from_utf8(contents).unwrap();
-    // let (encoded_contents, _, _) = WINDOWS_1252.encode(&source); # Portal was using this encoding. Seems to have migrated to UTF-8, but leaving this here just in case we need to revert.
-    let (encoded_contents, _, _) = UTF_8.encode(&source);
+    
+    let encoded_contents = match cfg.report_encoding {
+        ReportEncoding::Utf8 => {
+            let (encoded, _, _) = UTF_8.encode(&source);
+            encoded
+        }
+        ReportEncoding::Windows1252 => {
+            let (encoded, _, _) = WINDOWS_1252.encode(&source);
+            encoded
+        }
+    };
 
     file.write_all(&encoded_contents).unwrap();
 
